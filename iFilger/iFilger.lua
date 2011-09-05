@@ -10,11 +10,6 @@ local Filger_Spells = C.Filger_Spells;
 local class = select(2, UnitClass("player"));
 local classcolor = RAID_CLASS_COLORS[class];
 local active, bars = {}, {};
-local MyUnits = {
-    player = true,
-    vehicle = true,
-    pet = true,
-}
 
 local time, Update;
 local function OnUpdate(self, elapsed)
@@ -136,7 +131,7 @@ function Update(self)
 					bar.time = _G[bar.time:GetName()]
 				else			
 					bar.time = bar.statusbar:CreateFontString("$parentTime", "ARTWORK");
-					bar.time:SetFont(C.media.font, 14, "MONOCHROMEOUTLINE");
+					bar.time:SetFont(C.media.pixelfont, 14, "MONOCHROMEOUTLINE");
 					bar.time:SetPoint("RIGHT", bar.statusbar, I.Scale(0), 0);
 				end
 				
@@ -153,7 +148,7 @@ function Update(self)
 					bar.spellname = _G[bar.spellname:GetName()]
 				else
 					bar.spellname = bar.statusbar:CreateFontString("$parentSpellName", "ARTWORK");
-					bar.spellname:SetFont(C.media.font, 14, "MONOCHROMEOUTLINE");
+					bar.spellname:SetFont(C.media.pixelfont, 14, "MONOCHROMEOUTLINE");
 					bar.spellname:SetPoint("LEFT", bar.statusbar, I.Scale(2), 0);
 					bar.spellname:SetPoint("RIGHT", bar.time, "LEFT");
 					bar.spellname:SetJustifyH("LEFT");
@@ -210,14 +205,20 @@ local function OnEvent(self, event, ...)
 			if (data.filter == "BUFF") then
 				spn = GetSpellInfo( data.spellID )
 				name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable, _, spid = UnitBuff(data.unitId, spn);
+				if (spid and data.spellID ~= spid and data.absID) then
+					name = nil
+				end
 			elseif (data.filter == "DEBUFF") then
 				spn = GetSpellInfo( data.spellID )
 				name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable, _, spid = UnitDebuff(data.unitId, spn);
+				if (spid and data.spellID ~= spid and data.absID) then
+					name = nil
+				end
 			else
 				if (data.spellID) then
 					spn = GetSpellInfo(data.spellID)
 					start, duration, enabled = GetSpellCooldown(spn);
-					_, _, icon = GetSpellInfo(data.spellID);
+					name, _, icon = GetSpellInfo(data.spellID);
 				else
 					slotLink = GetInventoryItemLink("player", data.slotID);
 					if ( slotLink ) then
@@ -228,6 +229,7 @@ local function OnEvent(self, event, ...)
 						start, duration, enabled = GetInventoryItemCooldown("player", data.slotID);
 					end
 				end
+				spid = 0;
 				count = 0;
 				caster = "all";
 			end
@@ -240,10 +242,8 @@ local function OnEvent(self, event, ...)
 					break;
 				end
 			end
-			if ( ( name and ( data.caster ~= 1 and ( caster == data.caster or data.caster == "all" ) or MyUnits[caster] )) or ( ( enabled or 0 ) > 0 and ( duration or 0 ) > 1.5 ) and (spid and spid == data.spellID)) then
-				if (spid and data.spellID == spid) then
-					table.insert(active[id], { data = data, icon = icon, count = count, duration = duration, expirationTime = expirationTime or start });
-				end
+			if (( name and ( data.caster ~= 1 and ( caster == data.caster or data.caster == "all" ))) or ( ( enabled or 0 ) > 0 and ( duration or 0 ) > 1.5 ) ) then
+				table.insert(active[id], { data = data, icon = icon, count = count, duration = duration, expirationTime = expirationTime or start });
 			end
 		end
 		Update(self);
