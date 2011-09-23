@@ -1190,6 +1190,8 @@ C["Filger_Spells"] = {
 			{ spellID = 702, size = 30, unitId = "target", caster = "all", filter = "DEBUFF" },
 			-- Colossus Smash
 			{ spellID = 86346, size = 30, unitId = "target", caster = "player", filter = "DEBUFF" },
+			-- Shattering Throw
+			{ spellID = 64382, size = 30, unitId = "target", caster = "all", filter = "DEBUFF" },
 		},
 		{
 			Name = "Cooldown",
@@ -1203,8 +1205,6 @@ C["Filger_Spells"] = {
 			{ spellID = 1719, size = 30, unitId = "player", caster = "player", filter = "CD" },
 			-- throwdown
 			{ spellID = 85388, size = 30, unitId = "player", caster = "player", filter = "CD" },
-			-- berserker rage
-			{ spellID = 18499, size = 30, unitId = "player", caster = "player", filter = "CD" },
 			-- Death Wish
 			{ spellID = 12292, size = 30, unitId = "player", caster = "player", filter = "CD" },
 			-- Deadly Calm
@@ -1518,6 +1518,10 @@ C["Filger_Spells"] = {
 			{ spellID = 96923, size = 48, unitId = "player", caster = "player", filter = "BUFF" },
 			-- Blessing of the Shaper
 			{ spellID = 96928, size = 48, unitId = "player", caster = "player", filter = "BUFF" },
+			-- Soul Power (Soul Casket)
+			{ spellID = 91019, size = 52, unitId = "player", caster = "player", filter = "BUFF" },
+			-- Now is the time! (Mithril Stopwatch)
+			{ spellID = 101291, size = 52, unitId = "player", caster = "player", filter = "BUFF" },
 
 		-- Tier 12 Boni
 			-- Burning Rage
